@@ -1,3 +1,22 @@
-.hello-world {
-  color: green;
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0px;
+}
+
+nav {
+  height: 75px;
+  width: 100%;
+  background-color: lightgrey;
+}
+
+nav .logo {
+position: relative;
+float: right;
+margin: 15px;
+font-size: 1.3em;
+padding: 10px;
+border: solid black 1px;
 }
