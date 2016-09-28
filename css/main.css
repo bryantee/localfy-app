@@ -20,3 +20,10 @@ font-size: 1.3em;
 padding: 10px;
 border: solid black 1px;
 }
+
+.artist {
+  padding: 15px;
+  width: 95%;
+  border: 1px solid black;
+  margin: 15px auto;
+}
