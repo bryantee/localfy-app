@@ -66,6 +66,7 @@ function renderData (state, parentEl) {
     var div = "<div class='artist'>";
     div += "<img class='artist-img' src='" + item.img + "'>";
     div += "<h1 class='artist-name'>" + item.name + "</h1>";
+    div += "<p class='bio'>" + item.bio + "..." + "</p>";
     return div;
   });
   parentEl.html(htmlEl);
