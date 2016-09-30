@@ -2,12 +2,16 @@
 "use strict";
 
 $(document).ready(function() {
-
-
+  $(".logo").on("click", function(e) {
+    var location = prompt("Please enter your city. If nothing returns, try again with State or region.");
+    getRequest(location, 4);
+  });
 });
 
+// to keep track of all things state
 var state = {
-  artists: {}
+  artists: {},
+  countCallbacks: 0
 };
 
 //constructor for artist object
@@ -39,7 +43,8 @@ function getRequestArtistInfo(artistName) {
     artist: artistName
   };
   var url = "http://ws.audioscrobbler.com/2.0";
-  $.getJSON(url, params, setArtistInfo);
+  state.countCallbacks++;
+  $.getJSON(url, params).done(setArtistInfo).fail(function(){ console.log('Error getting artist') });
 }
 
 function setArtistInfo(data) {
@@ -48,6 +53,8 @@ function setArtistInfo(data) {
   var bio = data.artist.bio.summary;
   console.log(`bio : ${bio}`);
   state.artists[artistName].bio = bio;
+  state.countCallbacks--;
+  if (state.countCallbacks === 0) renderData(state, $('.artists-container'));
 }
 
 function setArtistsObject(data) {
@@ -58,6 +65,11 @@ function setArtistsObject(data) {
     var obj = new Artist(name, img, url);
     state.artists[name] = obj;
   });
+  for (var artist in state.artists) {
+    if (state.artists.hasOwnProperty(artist)) {
+      getRequestArtistInfo(state.artists[artist]['name']);
+    }
+  }
 }
 
 function renderData (state, parentEl) {
@@ -66,6 +78,7 @@ function renderData (state, parentEl) {
     var div = "<div class='artist'>";
     div += "<img class='artist-img' src='" + item.img + "'>";
     div += "<h1 class='artist-name'>" + item.name + "</h1>";
+    div += "<p class='bio'>" + item.bio + "..." + "</p>";
     return div;
   });
   parentEl.html(htmlEl);
