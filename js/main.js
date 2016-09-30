@@ -2,7 +2,7 @@
 "use strict";
 
 $(document).ready(function() {
-  $(".logo").on("click", function(e) {
+  $(".localfy-btn").on("click", function(e) {
     var location = prompt("Please enter your city. If nothing returns, try again with State or region.");
     getRequest(location, 4);
   });
