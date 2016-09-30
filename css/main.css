@@ -38,6 +38,7 @@ border: solid black 1px;
 
 .load-more-btn {
   margin-top: 10px;
+  margin-bottom: 10px;
   display: none;
 }
 
