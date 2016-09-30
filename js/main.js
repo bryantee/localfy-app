@@ -3,6 +3,7 @@
 
 $(document).ready(function() {
   $(".localfy-btn").on("click", function(e) {
+    $(".load-more-btn").show();
     var location = prompt("Please enter your city. If nothing returns, try again with State or region.");
     getRequest(location, 4);
   });
@@ -70,6 +71,11 @@ function setArtistsObject(data) {
       getRequestArtistInfo(state.artists[artist]['name']);
     }
   }
+}
+
+function loadMoreArtists() {
+  // TODO: When load-more-btn clicked, make another
+  //       request and append another 4 to the object.
 }
 
 function renderData (state, parentEl) {
