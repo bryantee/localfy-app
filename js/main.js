@@ -2,10 +2,16 @@
 "use strict";
 
 $(document).ready(function() {
+  var artistCount = 4;
+  var location;
   $(".localfy-btn").on("click", function(e) {
     $(".load-more-btn").show();
-    var location = prompt("Please enter your city. If nothing returns, try again with State or region.");
+    location = prompt("Please enter your city. If nothing returns, try again with State or region.");
     getRequest(location, 4);
+  });
+  $(".load-more-btn").on("click", function(e) {
+    artistCount += 4;
+    getRequest(location, artistCount);
   });
 });
 
@@ -61,21 +67,19 @@ function setArtistInfo(data) {
 function setArtistsObject(data) {
   data.topartists.artist.forEach(function(item, index) {
     var name = item.name;
-    var img = item.image[1]["#text"];
-    var url = item.url;
-    var obj = new Artist(name, img, url);
-    state.artists[name] = obj;
+    if (state.artists[name] == null) {
+      var img = item.image[1]["#text"];
+      var url = item.url;
+      var obj = new Artist(name, img, url);
+      state.artists[name] = obj;
+    }
   });
+  // call for more info on each artist
   for (var artist in state.artists) {
-    if (state.artists.hasOwnProperty(artist)) {
+    if (state.artists.hasOwnProperty(artist) && !state.artists[artist].hasOwnProperty("bio")) {
       getRequestArtistInfo(state.artists[artist]['name']);
     }
   }
-}
-
-function loadMoreArtists() {
-  // TODO: When load-more-btn clicked, make another
-  //       request and append another 4 to the object.
 }
 
 function renderData (state, parentEl) {
