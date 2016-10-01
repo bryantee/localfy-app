@@ -27,6 +27,7 @@ function Artist(name, img, url) {
   this.img = img;
   this.url = url;
   this.topTrack = undefined;
+  this.updated = false;
 }
 
 function getRequest(tag, limit) {
@@ -58,6 +59,7 @@ function setArtistInfo(data) {
   var artistName = data.artist.name;
   var bio = data.artist.bio.summary;
   state.artists[artistName].bio = bio;
+  state.artists[artistName].updated = true;
   state.countCallbacks--;
   if (state.countCallbacks === 0) renderData(state, $(".artists-container"));
 }
@@ -74,7 +76,7 @@ function setArtistsObject(data) {
   });
   // call for more info on each artist
   for (var artist in state.artists) {
-    if (state.artists.hasOwnProperty(artist) && !state.artists[artist].hasOwnProperty("bio")) {
+    if (state.artists.hasOwnProperty(artist) && state.artists[artist].updated == false) {
       getRequestArtistInfo(state.artists[artist]["name"]);
     }
   }
