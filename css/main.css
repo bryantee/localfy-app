@@ -21,6 +21,33 @@ padding: 10px;
 border: solid black 1px;
 }
 
+.tag-line {
+  width: 85%;
+  margin: 50px auto;
+}
+.localfy-btn,
+.load-more-btn {
+  padding: 15px;
+  border: solid black 1px;
+  max-width: 150px;
+  font-size: 1.25em;
+  text-align: center;
+  margin: 0 auto;
+  transition: .5s ease;
+}
+
+.load-more-btn {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: none;
+}
+
+.localfy-btn:hover,
+.load-more-btn:hover {
+  background-color: black;
+  color: white
+}
+
 .artist {
   padding: 15px;
   width: 95%;
