@@ -1,24 +1,28 @@
 /* global $ */
 "use strict";
 
+var autocomplete;
+
 $(document).ready(function() {
-  var artistCount = 4;
-  var location;
-  $(".localfy-btn").on("click", function(e) {
+  $(".localfy-btn").on("click", function() {
     $(".load-more-btn").show();
-    location = prompt("Please enter your city. If nothing returns, try again with State or region.");
-    getRequest(location, artistCount);
+    var location = locationToString();
+    getRequest(location, state.artistCount);
   });
-  $(".load-more-btn").on("click", function(e) {
-    artistCount += 4;
-    getRequest(location, artistCount);
+  $(".load-more-btn").on("click", function() {
+    var location = locationToString();
+    state.artistCount += 4;
+    getRequest(location, state.artistCount);
   });
 });
 
 // to keep track of all things state
 var state = {
   artists: {},
-  countCallbacks: 0
+  countCallbacks: 0,
+  locations: {},
+  artistCount: 4,
+  getGeoLocation: false
 };
 
 //constructor for artist object
@@ -26,8 +30,21 @@ function Artist(name, img, url) {
   this.name = name;
   this.img = img;
   this.url = url;
-  this.topTrack = undefined;
+  this.topTrack = undefined;  // TODO: Get top track for artist. Spotify API?
   this.updated = false;
+}
+
+function locationToString() {
+  var location = state.locations;
+  if (location.city) {
+    return location.city;
+  } else if (location.state) {
+    return location.state;
+  } else if (location.country) {
+    return location.country;
+  } else {
+    console.log("Error, no location data available.");
+  }
 }
 
 function getRequest(tag, limit) {
@@ -52,23 +69,27 @@ function getRequestArtistInfo(artistName) {
   };
   var url = "http://ws.audioscrobbler.com/2.0";
   state.countCallbacks++;
-  $.getJSON(url, params).done(setArtistInfo).fail(function(){ console.log('Error getting artist') });
+  $.getJSON(url, params).done(setArtistInfo).fail(function(){ console.log("Error getting artist"); });
 }
 
 function setArtistInfo(data) {
   var artistName = data.artist.name;
   var bio = data.artist.bio.summary;
+  var tags = data.artist.tags.tag.map(function(tag) {
+    return tag.name;
+  });
   state.artists[artistName].bio = bio;
+  state.artists[artistName].tags = tags;
   state.artists[artistName].updated = true;
   state.countCallbacks--;
   if (state.countCallbacks === 0) renderData(state, $(".artists-container"));
 }
 
 function setArtistsObject(data) {
-  data.topartists.artist.forEach(function(item, index) {
+  data.topartists.artist.forEach(function(item) {
     var name = item.name;
     if (state.artists[name] == null) {
-      var img = item.image[1]["#text"];
+      var img = item.image[3]["#text"];
       var url = item.url;
       var obj = new Artist(name, img, url);
       state.artists[name] = obj;
@@ -85,11 +106,80 @@ function setArtistsObject(data) {
 function renderData (state, parentEl) {
   var htmlEl = Object.keys(state.artists).map(function(index) {
     var item = state.artists[index];
+    var listEl = "<ul>";
+    item.tags.forEach(function(item) {
+      listEl += "<li>" + item;
+    });
+    listEl += "</ul>";
     var div = "<div class='artist'>";
     div += "<img class='artist-img' src='" + item.img + "'>";
     div += "<h1 class='artist-name'>" + item.name + "</h1>";
-    div += "<p class='bio'>" + item.bio + "..." + "</p>";
+    div += listEl;
+    div += "<p class='bio'>" + item.bio + "</p>";
     return div;
   });
   parentEl.html(htmlEl);
+}
+
+// google maps api function to get location
+function geolocate() {
+  if (navigator.geolocation && state.getGeoLocation == false) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      var geolocation = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      var params = {
+        latlng: geolocation.lat + "," + geolocation.lng,
+        key: "AIzaSyAbWcPOXZQgFeeM2OHtK1Y-Gje8yl6KU1Y"
+      };
+      var url = "https://maps.googleapis.com/maps/api/geocode/json";
+      $.getJSON(url, params)
+        .done(callbackGeolocate)
+        .fail(function() {
+          console.log("Error in geolocate...");
+        });
+    });
+  }
+}
+
+// callback for geolocation
+function callbackGeolocate(location) {
+  var locationString = "";
+  var locations = state.locations = {};
+  location.results[0].address_components.forEach(function(val) {
+    if (val.types[0] == "country") locations["country"] = val.long_name;
+    if (val.types[0] == "locality") locations["city"] = val.long_name;
+    if (val.types[0] == "administrative_area_level_1") locations["state"] = val.long_name;
+  });
+  if (state.locations.city) locationString += state.locations.city;
+  if (state.locations.state) locationString += ", " + state.locations.state;
+  if (state.locations.country) locationString += ", " + state.locations.country;
+  if (locationString == "") alert("There was an error getting your location.");
+  $("#location").val(locationString);
+  state.getGeoLocation = true;
+}
+
+// callback when selecting using google autocomplete input
+function callbackPlace(place) {
+  if (!place) place = autocomplete.getPlace();
+  var locations = state.locations = {};
+  // Set state.locations object with data from reverse geocoding from google
+  place.address_components.forEach(function (val) {
+    if (val.types[0] == "country") locations["country"] = val.long_name;
+    if (val.types[0] == "locality") locations["city"] = val.long_name;
+    if (val.types[0] == "administrative_area_level_1") locations["state"] = val.long_name;
+  });
+}
+
+function initAutocomplete() {
+  // Create the autocomplete object, restricting the search to geographical
+  // location types.
+  autocomplete = new google.maps.places.Autocomplete(
+    /** @type {!HTMLInputElement} */
+    (document.getElementById("location")), {
+      types: ["geocode"]
+    });
+
+  autocomplete.addListener("place_changed", callbackPlace);
 }

@@ -13,6 +13,7 @@
   </nav>
   <div class="artists-container">
     <h1 class="tag-line">Discover local artists, right on your phone or computer.</h1>
+    <input onFocus="geolocate()" id="location" type="text">
     <div class="localfy-btn">Localfy Me</div>
   </div>
   <div class="bottom-panel">
@@ -23,5 +24,7 @@
   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
   crossorigin="anonymous"></script>
   <script src="js/main.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbWcPOXZQgFeeM2OHtK1Y-Gje8yl6KU1Y&libraries=places&callback=initAutocomplete"
+       async defer></script>
 </body>
 </html>

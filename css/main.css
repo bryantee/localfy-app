@@ -25,6 +25,14 @@ border: solid black 1px;
   width: 85%;
   margin: 50px auto;
 }
+
+#location {
+  width: 50%;
+  margin: 20px auto;
+  display: block;
+  padding: 10px;
+}
+
 .localfy-btn,
 .load-more-btn {
   padding: 15px;
