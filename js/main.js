@@ -1,24 +1,30 @@
 /* global $ */
 "use strict";
 
+var autocomplete;
+
 $(document).ready(function() {
-  var artistCount = 4;
-  var location;
   $(".localfy-btn").on("click", function(e) {
     $(".load-more-btn").show();
-    location = prompt("Please enter your city. If nothing returns, try again with State or region.");
+    //location = prompt("Please enter your city. If nothing returns, try again with State or region.");
+    var location = state.locations.city;
+    var artistCount = state.artistCount;
     getRequest(location, artistCount);
   });
   $(".load-more-btn").on("click", function(e) {
-    artistCount += 4;
-    getRequest(location, artistCount);
+    var location = state.locations.city;
+    state.artistCount += 4;
+    getRequest(location, state.artistCount);
   });
 });
 
 // to keep track of all things state
 var state = {
   artists: {},
-  countCallbacks: 0
+  countCallbacks: 0,
+  locations: {},
+  artistCount: 4,
+  getGeoLocation: false
 };
 
 //constructor for artist object
@@ -92,4 +98,70 @@ function renderData (state, parentEl) {
     return div;
   });
   parentEl.html(htmlEl);
+}
+
+// google maps api function to get location
+function geolocate() {
+  if (navigator.geolocation && state.getGeoLocation == false) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      var geolocation = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      console.log(geolocation);
+      var params = {
+        latlng: geolocation.lat + "," + geolocation.lng,
+        key: "AIzaSyAbWcPOXZQgFeeM2OHtK1Y-Gje8yl6KU1Y"
+      };
+      var url = "https://maps.googleapis.com/maps/api/geocode/json";
+      $.getJSON(url, params)
+        .done(callbackGeolocate)
+        .fail(function() {
+          console.log("Error in geolocate...");
+        });
+    });
+  }
+}
+
+function callbackGeolocate(location) {
+  var locationString = '';
+  var locations = state.locations = {};
+  location.results[0].address_components.forEach(function(val) {
+    if (val.types[0] == "country") locations["country"] = val.long_name;
+    if (val.types[0] == "locality") locations["city"] = val.long_name;
+    if (val.types[0] == "administrative_area_level_1") locations["state"] = val.long_name;
+  });
+  if (state.locations.city) locationString += state.locations.city;
+  if (state.locations.state) locationString += ", " + state.locations.state;
+  if (state.locations.country) locationString += ", " + state.locations.country;
+  if (locationString == '') alert("There was an error getting your location.");
+  $('#location').val(locationString);
+  state.getGeoLocation = true;
+}
+
+function callbackPlace(place) {
+  console.log("place : ", place);
+  if (!place) place = autocomplete.getPlace();
+  var locations = state.locations;
+  console.log("Locations: ", locations);
+  var locations = state.locations = {};
+  // Set state.locations object with data from reverse geocoding from google
+  place.address_components.forEach(function (val) {
+    if (val.types[0] == "country") locations["country"] = val.long_name;
+    if (val.types[0] == "locality") locations["city"] = val.long_name;
+    if (val.types[0] == "administrative_area_level_1") locations["state"] = val.long_name;
+  });
+}
+
+function initAutocomplete() {
+  // Create the autocomplete object, restricting the search to geographical
+  // location types.
+  autocomplete = new google.maps.places.Autocomplete(
+    /** @type {!HTMLInputElement} */
+    (document.getElementById('location')), {
+      types: ['geocode']
+    });
+
+  //geolocate();
+  autocomplete.addListener('place_changed', callbackPlace);
 }
