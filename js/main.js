@@ -112,9 +112,8 @@ function renderData (state, parentEl) {
     });
     listEl += "</ul>";
     var div = "<div class='row'><div class='col s12 m12 l6'><div class='card'><div class='card-content'>"; // open row, col, card, card-content
-    div += "<div class='artist card-title'>";
     div += "<img class='artist-img responsive-img circle' src='" + item.img + "'>";
-    div += "<h1 class='artist-name'>" + item.name + "</h1>";
+    div += "<h1 class='artist-name card-title'>" + item.name + "</h1>";
     div += listEl;
     div += "<p class='bio flow-text'>" + item.bio + "</p>";
     div += "</div></div></div></div>" // close row, col, card, card-content
