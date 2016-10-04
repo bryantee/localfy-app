@@ -89,7 +89,7 @@ function setArtistsObject(data) {
   data.topartists.artist.forEach(function(item) {
     var name = item.name;
     if (state.artists[name] == null) {
-      var img = item.image[3]["#text"];
+      var img = item.image[2]["#text"];
       var url = item.url;
       var obj = new Artist(name, img, url);
       state.artists[name] = obj;
@@ -108,14 +108,16 @@ function renderData (state, parentEl) {
     var item = state.artists[index];
     var listEl = "<ul>";
     item.tags.forEach(function(item) {
-      listEl += "<li>" + item;
+      listEl += "<li class='chip'>" + item;
     });
     listEl += "</ul>";
-    var div = "<div class='artist'>";
-    div += "<img class='artist-img' src='" + item.img + "'>";
+    var div = "<div class='row'><div class='col s12 m12 l6'><div class='card'><div class='card-content'>"; // open row, col, card, card-content
+    div += "<div class='artist card-title'>";
+    div += "<img class='artist-img responsive-img circle' src='" + item.img + "'>";
     div += "<h1 class='artist-name'>" + item.name + "</h1>";
     div += listEl;
-    div += "<p class='bio'>" + item.bio + "</p>";
+    div += "<p class='bio flow-text'>" + item.bio + "</p>";
+    div += "</div></div></div></div>" // close row, col, card, card-content
     return div;
   });
   parentEl.html(htmlEl);
