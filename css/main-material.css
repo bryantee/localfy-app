@@ -1,3 +1,12 @@
+.tag-line {
+  margin: 30px;
+  text-align: center;
+}
+
+#location {
+  marign-top: 45px;
+}
+
 .btn {
   margin: 0 auto;
   display: block;
