@@ -4,14 +4,12 @@
 var autocomplete;
 
 $(document).ready(function() {
-  $(".localfy-btn").on("click", function(e) {
+  $(".localfy-btn").on("click", function() {
     $(".load-more-btn").show();
-    //location = prompt("Please enter your city. If nothing returns, try again with State or region.");
     var location = locationToString();
-    var artistCount = state.artistCount;
-    getRequest(location, artistCount);
+    getRequest(location, state.artistCount);
   });
-  $(".load-more-btn").on("click", function(e) {
+  $(".load-more-btn").on("click", function() {
     var location = locationToString();
     state.artistCount += 4;
     getRequest(location, state.artistCount);
@@ -32,7 +30,7 @@ function Artist(name, img, url) {
   this.name = name;
   this.img = img;
   this.url = url;
-  this.topTrack = undefined;
+  this.topTrack = undefined;  // TODO: Get top track for artist. Spotify API?
   this.updated = false;
 }
 
@@ -71,7 +69,7 @@ function getRequestArtistInfo(artistName) {
   };
   var url = "http://ws.audioscrobbler.com/2.0";
   state.countCallbacks++;
-  $.getJSON(url, params).done(setArtistInfo).fail(function(){ console.log('Error getting artist'); });
+  $.getJSON(url, params).done(setArtistInfo).fail(function(){ console.log("Error getting artist"); });
 }
 
 function setArtistInfo(data) {
@@ -108,7 +106,7 @@ function setArtistsObject(data) {
 function renderData (state, parentEl) {
   var htmlEl = Object.keys(state.artists).map(function(index) {
     var item = state.artists[index];
-    var listEl = '<ul>';
+    var listEl = "<ul>";
     item.tags.forEach(function(item) {
       listEl += "<li>" + item;
     });
@@ -117,7 +115,7 @@ function renderData (state, parentEl) {
     div += "<img class='artist-img' src='" + item.img + "'>";
     div += "<h1 class='artist-name'>" + item.name + "</h1>";
     div += listEl;
-    div += "<p class='bio'>" + item.bio + "..." + "</p>";
+    div += "<p class='bio'>" + item.bio + "</p>";
     return div;
   });
   parentEl.html(htmlEl);
@@ -131,7 +129,6 @@ function geolocate() {
         lat: position.coords.latitude,
         lng: position.coords.longitude
       };
-      console.log(geolocation);
       var params = {
         latlng: geolocation.lat + "," + geolocation.lng,
         key: "AIzaSyAbWcPOXZQgFeeM2OHtK1Y-Gje8yl6KU1Y"
@@ -146,8 +143,9 @@ function geolocate() {
   }
 }
 
+// callback for geolocation
 function callbackGeolocate(location) {
-  var locationString = '';
+  var locationString = "";
   var locations = state.locations = {};
   location.results[0].address_components.forEach(function(val) {
     if (val.types[0] == "country") locations["country"] = val.long_name;
@@ -157,16 +155,14 @@ function callbackGeolocate(location) {
   if (state.locations.city) locationString += state.locations.city;
   if (state.locations.state) locationString += ", " + state.locations.state;
   if (state.locations.country) locationString += ", " + state.locations.country;
-  if (locationString == '') alert("There was an error getting your location.");
-  $('#location').val(locationString);
+  if (locationString == "") alert("There was an error getting your location.");
+  $("#location").val(locationString);
   state.getGeoLocation = true;
 }
 
+// callback when selecting using google autocomplete input
 function callbackPlace(place) {
-  console.log("place : ", place);
   if (!place) place = autocomplete.getPlace();
-  var locations = state.locations;
-  console.log("Locations: ", locations);
   var locations = state.locations = {};
   // Set state.locations object with data from reverse geocoding from google
   place.address_components.forEach(function (val) {
@@ -181,10 +177,9 @@ function initAutocomplete() {
   // location types.
   autocomplete = new google.maps.places.Autocomplete(
     /** @type {!HTMLInputElement} */
-    (document.getElementById('location')), {
-      types: ['geocode']
+    (document.getElementById("location")), {
+      types: ["geocode"]
     });
 
-  //geolocate();
-  autocomplete.addListener('place_changed', callbackPlace);
+  autocomplete.addListener("place_changed", callbackPlace);
 }
