@@ -7,12 +7,12 @@ $(document).ready(function() {
   $(".localfy-btn").on("click", function(e) {
     $(".load-more-btn").show();
     //location = prompt("Please enter your city. If nothing returns, try again with State or region.");
-    var location = state.locations.city;
+    var location = locationToString();
     var artistCount = state.artistCount;
     getRequest(location, artistCount);
   });
   $(".load-more-btn").on("click", function(e) {
-    var location = state.locations.city;
+    var location = locationToString();
     state.artistCount += 4;
     getRequest(location, state.artistCount);
   });
@@ -34,6 +34,19 @@ function Artist(name, img, url) {
   this.url = url;
   this.topTrack = undefined;
   this.updated = false;
+}
+
+function locationToString() {
+  var location = state.locations;
+  if (location.city) {
+    return location.city;
+  } else if (location.state) {
+    return location.state;
+  } else if (location.country) {
+    return location.country;
+  } else {
+    console.log("Error, no location data available.");
+  }
 }
 
 function getRequest(tag, limit) {
