@@ -58,13 +58,17 @@ function getRequestArtistInfo(artistName) {
   };
   var url = "http://ws.audioscrobbler.com/2.0";
   state.countCallbacks++;
-  $.getJSON(url, params).done(setArtistInfo).fail(function(){ console.log('Error getting artist') });
+  $.getJSON(url, params).done(setArtistInfo).fail(function(){ console.log('Error getting artist'); });
 }
 
 function setArtistInfo(data) {
   var artistName = data.artist.name;
   var bio = data.artist.bio.summary;
+  var tags = data.artist.tags.tag.map(function(tag) {
+    return tag.name;
+  });
   state.artists[artistName].bio = bio;
+  state.artists[artistName].tags = tags;
   state.artists[artistName].updated = true;
   state.countCallbacks--;
   if (state.countCallbacks === 0) renderData(state, $(".artists-container"));
@@ -91,9 +95,15 @@ function setArtistsObject(data) {
 function renderData (state, parentEl) {
   var htmlEl = Object.keys(state.artists).map(function(index) {
     var item = state.artists[index];
+    var listEl = '<ul>';
+    item.tags.forEach(function(item) {
+      listEl += "<li>" + item;
+    });
+    listEl += "</ul>";
     var div = "<div class='artist'>";
     div += "<img class='artist-img' src='" + item.img + "'>";
     div += "<h1 class='artist-name'>" + item.name + "</h1>";
+    div += listEl;
     div += "<p class='bio'>" + item.bio + "..." + "</p>";
     return div;
   });
