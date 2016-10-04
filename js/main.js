@@ -75,10 +75,10 @@ function setArtistInfo(data) {
 }
 
 function setArtistsObject(data) {
-  data.topartists.artist.forEach(function(item, index) {
+  data.topartists.artist.forEach(function(item) {
     var name = item.name;
     if (state.artists[name] == null) {
-      var img = item.image[1]["#text"];
+      var img = item.image[3]["#text"];
       var url = item.url;
       var obj = new Artist(name, img, url);
       state.artists[name] = obj;
