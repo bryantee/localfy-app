@@ -4,6 +4,7 @@
 var autocomplete;
 
 $(document).ready(function() {
+  $(".button-collapse").sideNav();
   $(".localfy-btn").on("click", function() {
     $(".load-more-btn").css("display", "block");
     var location = locationToString();
