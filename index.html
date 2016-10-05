@@ -4,25 +4,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+  <link rel="stylesheet" href="css/main-material.css">
+  <!-- <link rel="stylesheet" href="css/main.css"> -->
   <title>Localfy -- Discover Local Artists</title>
 </head>
 <body>
   <nav>
-    <div class="logo">Localfy</div>
+    <div class="nav-wrapper">
+      <div class="brand-logo right">Localfy</div>
+    </div>
   </nav>
-  <div class="artists-container">
-    <h1 class="tag-line">Discover local artists, right on your phone or computer.</h1>
+  <div class="artists-container container row">
+    <h3 class="tag-line">Discover local artists, right on your phone or computer.</h1>
     <input onFocus="geolocate()" id="location" type="text">
-    <div class="localfy-btn">Localfy Me</div>
+    <button class="localfy-btn waves-effect waves-light btn">Localfy Me</button>
   </div>
   <div class="bottom-panel">
-    <div class="load-more-btn">Load More Artists</div>
+    <button class="waves-effect waves-light btn load-more-btn">Load More Artists</button>
   </div>
   <script
   src="https://code.jquery.com/jquery-3.1.1.min.js"
   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
   crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
   <script src="js/main.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbWcPOXZQgFeeM2OHtK1Y-Gje8yl6KU1Y&libraries=places&callback=initAutocomplete"
        async defer></script>
