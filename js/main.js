@@ -90,7 +90,12 @@ function setArtistsObject(data) {
   data.topartists.artist.forEach(function(item) {
     var name = item.name;
     if (state.artists[name] == null) {
-      var img = item.image[3]["#text"];
+      var img;
+      if (item.image[3]["#text"] !== "") {
+        img = item.image[3]["#text"];
+      } else {
+        img = "images/default.png";
+      }
       var url = item.url;
       var obj = new Artist(name, img, url);
       state.artists[name] = obj;
