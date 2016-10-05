@@ -5,7 +5,7 @@ var autocomplete;
 
 $(document).ready(function() {
   $(".localfy-btn").on("click", function() {
-    $(".load-more-btn").show();
+    $(".load-more-btn").css("display", "block");
     var location = locationToString();
     getRequest(location, state.artistCount);
   });
