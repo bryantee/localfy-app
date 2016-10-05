@@ -1,3 +1,18 @@
+.contact {
+  margin-left: 10px;
+}
+
+.logo {
+  margin-right: 5px;
+}
+
+@media (min-width: 700px) {
+  .nav-wrapper {
+    width: 75%;
+    margin: 0 auto;
+  }
+}
+
 .tag-line {
   margin: 30px;
   text-align: center;
