@@ -1,0 +1,21 @@
+.tag-line {
+  margin: 30px;
+  text-align: center;
+}
+
+.card.large {
+  height: 550px;
+}
+
+#location {
+  marign-top: 45px;
+}
+
+.btn {
+  margin: 0 auto;
+  display: block;
+}
+
+.load-more-btn {
+  display: none;
+}
