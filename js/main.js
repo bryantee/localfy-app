@@ -89,7 +89,7 @@ function setArtistsObject(data) {
   data.topartists.artist.forEach(function(item) {
     var name = item.name;
     if (state.artists[name] == null) {
-      var img = item.image[2]["#text"];
+      var img = item.image[3]["#text"];
       var url = item.url;
       var obj = new Artist(name, img, url);
       state.artists[name] = obj;
@@ -111,12 +111,14 @@ function renderData (state, parentEl) {
       listEl += "<li class='chip'>" + item;
     });
     listEl += "</ul>";
-    var div = "<div class='row'><div class='col s12 m12 l6'><div class='card'><div class='card-content'>"; // open row, col, card, card-content
-    div += "<img class='artist-img responsive-img circle' src='" + item.img + "'>";
-    div += "<h1 class='artist-name card-title'>" + item.name + "</h1>";
+    var div = "<div class='col s12 m8 l6'><div class='card large'>"; // open col, card
+    div += "<div class='card-image waves-effect waves-block waves-light'><img class='artist-img activator' src='" + item.img + "'></div><div class='card-content'>";
+    div += "<span class='artist-name card-title'>" + item.name + "</span>";
     div += listEl;
-    div += "<p class='bio flow-text'>" + item.bio + "</p>";
-    div += "</div></div></div></div>" // close row, col, card, card-content
+    div += "</div>"; // close out card-content
+    div += "<div class='card-reveal'><span class='artist-name card-title'>" + item.name + "<i class='material-icons right'>close</i></span><p class='bio flow-text'>" + item.bio + "</p></div>";
+    div += "<div class='card-action'><a href='" + item.url + "'>Artist Page</a></div>";
+    div += "</div></div>"; // close col, card
     return div;
   });
   parentEl.html(htmlEl);

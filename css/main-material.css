@@ -3,6 +3,10 @@
   text-align: center;
 }
 
+.card.large {
+  height: 550px;
+}
+
 #location {
   marign-top: 45px;
 }
