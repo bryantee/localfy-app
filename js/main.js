@@ -5,10 +5,18 @@ var autocomplete;
 
 $(document).ready(function() {
   $(".button-collapse").sideNav();
-  $(".localfy-btn").on("click", function() {
-    $(".load-more-btn").css("display", "block");
+  geolocate();
+  $("#location").on("change", function() {
+    state.locations = {};
+  });
+  $("#search-form").on("submit", function(e) {
+    e.preventDefault();
+    state.searchType = "city";
     var location = locationToString();
-    getRequest(location, state.artistCount);
+    if (location !== "undefined") getRequest(location, state.artistCount);
+  });
+  $(".new-search").on("click", function() {
+    window.location = "/";
   });
   $(".load-more-btn").on("click", function() {
     var location = locationToString();
@@ -23,7 +31,8 @@ var state = {
   countCallbacks: 0,
   locations: {},
   artistCount: 4,
-  getGeoLocation: false
+  getGeoLocation: false,
+  searchType: "city"
 };
 
 //constructor for artist object
@@ -37,13 +46,15 @@ function Artist(name, img, url) {
 
 function locationToString() {
   var location = state.locations;
-  if (location.city) {
+  var searchType = state.searchType;
+  if (searchType == "city") {
     return location.city;
-  } else if (location.state) {
+  } else if (searchType == "state") {
     return location.state;
   } else if (location.country) {
     return location.country;
   } else {
+    Materialize.toast("Select a valid location from the dropbdown.", 5000);
     console.log("Error, no location data available.");
   }
 }
@@ -87,6 +98,11 @@ function setArtistInfo(data) {
 }
 
 function setArtistsObject(data) {
+  if (data.topartists.artist.length == 0 && state.searchType == "city") {
+    state.searchType = "state";
+    var location = state.locations.state;
+    getRequest(location, state.artistCount);
+  }
   data.topartists.artist.forEach(function(item) {
     var name = item.name;
     if (state.artists[name] == null) {
@@ -123,11 +139,16 @@ function renderData (state, parentEl) {
     div += listEl;
     div += "</div>"; // close out card-content
     div += "<div class='card-reveal'><span class='artist-name card-title'>" + item.name + "<i class='material-icons right'>close</i></span><p class='bio'>" + item.bio + "</p></div>";
-    div += "<div class='card-action'><a href='" + item.url + "'>Artist Page</a></div>";
+    div += "<div class='card-action'><a target='_new' href='" + item.url + "'>Artist Page</a></div>";
     div += "</div></div>"; // close col, card
     return div;
   });
+  if (state.searchType == "state") {
+    var prependDiv = "<div class='col s12 m12 l12'><div class='card-panel teal'><span class='white-text'>Looks like " + state.locations.city + " returned no results, so we used " + state.locations.state + " as a search term here. Try doing a new search and using a surrounding city instead. Sorry...</span></div></div>";
+    htmlEl.unshift(prependDiv);
+  }
   parentEl.html(htmlEl);
+  $(".bottom-panel").css("display", "flex");
 }
 
 // google maps api function to get location

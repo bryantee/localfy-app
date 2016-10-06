@@ -37,6 +37,10 @@
   display: block;
 }
 
-.load-more-btn {
+.bottom-panel {
   display: none;
+}
+
+.bottom-panel button {
+  margin-bottom: 25px;
 }

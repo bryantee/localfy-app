@@ -15,23 +15,26 @@
     <div class="nav-wrapper">
       <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
       <ul id="nav-mobile" class="contact left hide-on-med-and-down">
-        <li><a href="https://github.com/bryantee/localfy-app">Github</a></li>
-        <li><a href="https://twitter.com/bryanswagerty">Twitter</a></li>
+        <li><a target="_new" href="https://github.com/bryantee/localfy-app">Github</a></li>
+        <li><a target="_new" href="http://bryanswagerty.com">About Me</a></li>
       </ul>
       <ul class="side-nav" id="mobile-demo">
-        <li><a href="https://github.com/bryantee/localfy-app">Github</a></li>
-        <li><a href="https://twitter.com/bryanswagerty">Twitter</a></li>
+        <li><a target="_new" href="https://github.com/bryantee/localfy-app">Github</a></li>
+        <li><a target="_new" href="http://bryanswagerty.com">About Me</a></li>
       </ul>
-      <div class="brand-logo center">Localfy</div>
+      <div class="brand-logo center"><a href="/">Localfy</a></div>
     </div>
   </nav>
   <div class="artists-container container row">
-    <h4 class="tag-line">Discover local artists, right on your phone or computer.</h4>
-    <input onFocus="geolocate()" id="location" type="text">
-    <button class="localfy-btn waves-effect waves-light btn-large">Localfy Me</button>
+    <form id="search-form">
+      <h4 class="tag-line">Discover local artists, right on your phone or computer.</h4>
+      <input id="location" type="text" required>
+      <button class="localfy-btn waves-effect waves-light btn-large" type="submit">Localfy Me</button>
+    </form>
   </div>
-  <div class="bottom-panel">
+  <div class="container bottom-panel">
     <button class="waves-effect waves-light btn-large load-more-btn">Load More Artists</button>
+    <!-- <button class="btn-large new-search waves-effect waves-light">New Search</button> -->
   </div>
   <script
   src="https://code.jquery.com/jquery-3.1.1.min.js"
