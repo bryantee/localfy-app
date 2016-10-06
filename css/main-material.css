@@ -42,6 +42,5 @@
 }
 
 .bottom-panel button {
-  flex: 1;
-  margin-bottom: 0px;
+  margin-bottom: 25px;
 }

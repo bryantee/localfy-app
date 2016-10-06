@@ -12,7 +12,6 @@ $(document).ready(function() {
   $("#search-form").on("submit", function(e) {
     e.preventDefault();
     state.searchType = "city";
-    $(".bottom-panel").css("display", "flex");
     var location = locationToString();
     getRequest(location, state.artistCount);
   });
@@ -146,6 +145,7 @@ function renderData (state, parentEl) {
     htmlEl.unshift(prependDiv);
   }
   parentEl.html(htmlEl);
+  $(".bottom-panel").css("display", "flex");
 }
 
 // google maps api function to get location
