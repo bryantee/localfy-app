@@ -12,6 +12,7 @@ $(document).ready(function() {
   $("#search-form").on("submit", function(e) {
     e.preventDefault();
     state.searchType = "city";
+    if ($.isEmptyObject(state.locations)) Materialize.toast("Select a valid location from dropdown.", 5000);
     var location = locationToString();
     if (location !== "undefined") getRequest(location, state.artistCount);
   });
@@ -51,11 +52,6 @@ function locationToString() {
     return location.city;
   } else if (searchType == "state") {
     return location.state;
-  } else if (location.country) {
-    return location.country;
-  } else {
-    Materialize.toast("Select a valid location from the dropbdown.", 5000);
-    console.log("Error, no location data available.");
   }
 }
 
