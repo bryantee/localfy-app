@@ -131,7 +131,7 @@ function renderData (state, parentEl) {
     div += listEl;
     div += "</div>"; // close out card-content
     div += "<div class='card-reveal'><span class='artist-name card-title'>" + item.name + "<i class='material-icons right'>close</i></span><p class='bio'>" + item.bio + "</p></div>";
-    div += "<div class='card-action'><a href='" + item.url + "'>Artist Page</a></div>";
+    div += "<div class='card-action'><a target='_new' href='" + item.url + "'>Artist Page</a></div>";
     div += "</div></div>"; // close col, card
     return div;
   });
