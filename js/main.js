@@ -31,7 +31,8 @@ var state = {
   countCallbacks: 0,
   locations: {},
   artistCount: 4,
-  getGeoLocation: false
+  getGeoLocation: false,
+  searchType: "city"
 };
 
 //constructor for artist object
@@ -45,9 +46,10 @@ function Artist(name, img, url) {
 
 function locationToString() {
   var location = state.locations;
-  if (location.city) {
+  var searchType = state.searchType;
+  if (searchType == "city") {
     return location.city;
-  } else if (location.state) {
+  } else if (searchType == "state") {
     return location.state;
   } else if (location.country) {
     return location.country;
