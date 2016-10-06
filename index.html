@@ -26,9 +26,11 @@
     </div>
   </nav>
   <div class="artists-container container row">
-    <h4 class="tag-line">Discover local artists, right on your phone or computer.</h4>
-    <input onFocus="geolocate()" id="location" type="text">
-    <button class="localfy-btn waves-effect waves-light btn-large">Localfy Me</button>
+    <form id="search-form">
+      <h4 class="tag-line">Discover local artists, right on your phone or computer.</h4>
+      <input onFocus="geolocate()" id="location" type="text" required>
+      <button class="localfy-btn waves-effect waves-light btn-large" type="submit">Localfy Me</button>
+    </form>
   </div>
   <div class="bottom-panel">
     <button class="waves-effect waves-light btn-large load-more-btn">Load More Artists</button>

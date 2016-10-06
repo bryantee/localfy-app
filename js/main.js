@@ -7,6 +7,11 @@ $(document).ready(function() {
   $(".button-collapse").sideNav();
   $(".localfy-btn").on("click", function() {
     $(".load-more-btn").css("display", "block");
+  $("#location").on("change", function() {
+    state.locations = {};
+  });
+  $("#search-form").on("submit", function(e) {
+    e.preventDefault();
     var location = locationToString();
     getRequest(location, state.artistCount);
   });
