@@ -13,7 +13,7 @@ $(document).ready(function() {
     e.preventDefault();
     state.searchType = "city";
     var location = locationToString();
-    getRequest(location, state.artistCount);
+    if (location !== "undefined") getRequest(location, state.artistCount);
   });
   $(".new-search").on("click", function() {
     window.location = "/";
@@ -52,6 +52,7 @@ function locationToString() {
   } else if (location.country) {
     return location.country;
   } else {
+    Materialize.toast("Select a valid location from the dropbdown.", 5000);
     console.log("Error, no location data available.");
   }
 }
