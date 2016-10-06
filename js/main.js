@@ -95,6 +95,11 @@ function setArtistInfo(data) {
 }
 
 function setArtistsObject(data) {
+  if (data.topartists.artist.length == 0 && state.searchType == "city") {
+    state.searchType = "state";
+    var location = state.locations.state;
+    getRequest(location, state.artistCount);
+  }
   data.topartists.artist.forEach(function(item) {
     var name = item.name;
     if (state.artists[name] == null) {
@@ -135,6 +140,10 @@ function renderData (state, parentEl) {
     div += "</div></div>"; // close col, card
     return div;
   });
+  if (state.searchType == "state") {
+    var prependDiv = "<div class='col s12 m12 l12'><div class='card-panel teal'><span class='white-text'>Looks like " + state.locations.city + " returned no results, so we used " + state.locations.state + " as a search term here. Try doing a new search and using a surrounding city instead. Sorry...</span></div></div>";
+    htmlEl.unshift(prependDiv);
+  }
   parentEl.html(htmlEl);
 }
 
