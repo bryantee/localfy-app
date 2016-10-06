@@ -5,6 +5,7 @@ var autocomplete;
 
 $(document).ready(function() {
   $(".button-collapse").sideNav();
+  geolocate();
   $("#location").on("change", function() {
     state.locations = {};
   });
