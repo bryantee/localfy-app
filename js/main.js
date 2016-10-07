@@ -1,27 +1,24 @@
 /* global $ */
 "use strict";
 
-var autocomplete;
+var autocomplete; // Needed for google places library
 
 $(document).ready(function() {
   $(".button-collapse").sideNav();
   geolocate();
   $("#location").on("change", function() {
-    state.locations = {};
+    state.locations = {}; // Reset the location state if search term changes (before submit)
   });
   $("#search-form").on("submit", function(e) {
     e.preventDefault();
-    state.searchType = "city";
-    if ($.isEmptyObject(state.locations)) Materialize.toast("Select a valid location from dropdown.", 5000);
+    state.searchType = "city"; // Reset search type in case last search was on state level
+    if ($.isEmptyObject(state.locations)) Materialize.toast("Select a valid location from dropdown.", 5000); // Let user know why nothing is coming up
     var location = locationToString();
     if (location !== "undefined") getRequest(location, state.artistCount);
   });
-  $(".new-search").on("click", function() {
-    window.location = "/";
-  });
   $(".load-more-btn").on("click", function() {
     var location = locationToString();
-    state.artistCount += 4;
+    state.artistCount += 4; // keep track of artists during each load
     getRequest(location, state.artistCount);
   });
 });
@@ -55,6 +52,7 @@ function locationToString() {
   }
 }
 
+// The initial request to Last.fm API using the location tag
 function getRequest(tag, limit) {
   var params = {
     api_key: "28013ebbad44c5793cdc84377c824554",
@@ -64,10 +62,10 @@ function getRequest(tag, limit) {
     limit: limit
   };
   var url = "http://ws.audioscrobbler.com/2.0";
-  // start the call
   $.getJSON(url, params, setArtistsObject);
 }
 
+// Make the second series of requests for more info on each artist after they've been set in the state object
 function getRequestArtistInfo(artistName) {
   var params = {
     api_key: "28013ebbad44c5793cdc84377c824554",
@@ -76,10 +74,11 @@ function getRequestArtistInfo(artistName) {
     artist: artistName
   };
   var url = "http://ws.audioscrobbler.com/2.0";
-  state.countCallbacks++;
+  state.countCallbacks++; // keep track of callback count so render function knows when to fire
   $.getJSON(url, params).done(setArtistInfo).fail(function(){ console.log("Error getting artist"); });
 }
 
+// Gets more info for each artist after they've been initially set in the state object
 function setArtistInfo(data) {
   var artistName = data.artist.name;
   var bio = data.artist.bio.summary;
@@ -93,6 +92,7 @@ function setArtistInfo(data) {
   if (state.countCallbacks === 0) renderData(state, $(".artists-container"));
 }
 
+// Initis each artist property in the state.artists object
 function setArtistsObject(data) {
   if (data.topartists.artist.length == 0 && state.searchType == "city") {
     state.searchType = "state";
@@ -121,6 +121,7 @@ function setArtistsObject(data) {
   }
 }
 
+// Render all of the data into the view container after artists are loaded up
 function renderData (state, parentEl) {
   var htmlEl = Object.keys(state.artists).map(function(index) {
     var item = state.artists[index];
@@ -147,7 +148,7 @@ function renderData (state, parentEl) {
   $(".bottom-panel").css("display", "flex");
 }
 
-// google maps api function to get location
+// Google maps api function to get location
 function geolocate() {
   if (navigator.geolocation && state.getGeoLocation == false) {
     navigator.geolocation.getCurrentPosition(function (position) {
@@ -169,7 +170,8 @@ function geolocate() {
   }
 }
 
-// callback for geolocation
+// Callback for geolocation
+// Sets up state.locations object using appropriate places, ie city and state
 function callbackGeolocate(location) {
   var locationString = "";
   var locations = state.locations = {};
@@ -186,7 +188,7 @@ function callbackGeolocate(location) {
   state.getGeoLocation = true;
 }
 
-// callback when selecting using google autocomplete input
+// Callback when selecting using google autocomplete input
 function callbackPlace(place) {
   if (!place) place = autocomplete.getPlace();
   var locations = state.locations = {};
@@ -198,14 +200,12 @@ function callbackPlace(place) {
   });
 }
 
+// Callback after googleapi place library loads, setups up autocomplete for location input
 function initAutocomplete() {
-  // Create the autocomplete object, restricting the search to geographical
-  // location types.
   autocomplete = new google.maps.places.Autocomplete(
     /** @type {!HTMLInputElement} */
     (document.getElementById("location")), {
       types: ["geocode"]
     });
-
   autocomplete.addListener("place_changed", callbackPlace);
 }
