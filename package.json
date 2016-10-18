@@ -1,0 +1,28 @@
+{
+  "name": "localfy",
+  "version": "1.0.0",
+  "description": "Find local artists using Last.fm",
+  "main": "js/main.js",
+  "dependencies": {},
+  "devDependencies": {
+    "webpack": "^1.13.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bryantee/localfy-app.git"
+  },
+  "keywords": [
+    "last.fm",
+    "music",
+    "materialize"
+  ],
+  "author": "Bryan Swagerty",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bryantee/localfy-app/issues"
+  },
+  "homepage": "https://github.com/bryantee/localfy-app#readme"
+}
