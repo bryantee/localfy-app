@@ -16,7 +16,25 @@
     "webpack": "^1.13.2"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm run clean && npm run mkdir && npm run build:html && npm run build:css && npm run build:js",
+    "watch": "npm run watch:html & npm run watch:css & npm run watch:js",
+    "clean": "rm -fr build",
+    "mkdir": "mkdir -p build",
+    "build:css": "npm run clean:css && cat css/*.css | cleancss -o build/$npm_package_name.min.css",
+    "clean:css": "rm -fr buil/$npm_package_name.min.css",
+    "watch:css": "npm run build:css && chokidar 'css/*.css' -c 'npm run build:css'",
+    "build:html": "npm run clean:html && cp *.html build/",
+    "clean:html": "rm -fr build/*.html",
+    "watch:html": "npm run build:html && chokidar '*.html' -c 'npm run build:html'",
+    "build:js:unminified": "npm run clean:js:unminified && webpack",
+    "watch:js:unminified": "npm run build:js:unminified && webpack --watch",
+    "clean:js:unminified": "rm -f build/$npm_package_name.$npm_package_version.js build/$npm_package_name.$npm_package_version.js.map",
+    "build:js:minified": "npm run clean:js:minified && webpack --minify",
+    "watch:js:minified": "npm run build:js:minified && webpack --watch --minify",
+    "clean:js:minified": "rm -f build/$npm_package_name.$npm_package_version.min.js build/$npm_package_name.$npm_package_version.min.js.map",
+    "build:js": "npm run build:js:minified && npm run build:js:unminified",
+    "watch:js": "npm run watch:js:minified && npm run watch:js:unminified",
+    "clean:js": "npm run clean:js:minified && npm run clean:js:unminified"
   },
   "repository": {
     "type": "git",

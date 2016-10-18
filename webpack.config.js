@@ -35,5 +35,4 @@ module.exports = {
       ]
     },
     plugins: plugins
-}
-Contact GitHub API Training Shop Blog About
+};
