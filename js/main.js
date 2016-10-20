@@ -201,7 +201,7 @@ function callbackPlace(place) {
 }
 
 // Callback after googleapi place library loads, setups up autocomplete for location input
-function initAutocomplete() {
+window.initAutocomplete = function() {
   autocomplete = new google.maps.places.Autocomplete(
     /** @type {!HTMLInputElement} */
     (document.getElementById("location")), {

@@ -40,7 +40,7 @@
     "clean:js:minified": "rm -f build/$npm_package_name.$npm_package_version.min.js build/$npm_package_name.$npm_package_version.min.js.map",
     "build:js": "npm run build:js:minified && npm run build:js:unminified",
     "watch:js": "npm run watch:js:minified && npm run watch:js:unminified",
-    "clean:js": "npm run clean:js:minified && npm run clean:js:unminified"
+    "clean:js": "npm run clean:js:minified && npm run clean:js:unminified",
   },
   "repository": {
     "type": "git",
