@@ -16,7 +16,7 @@
     "webpack": "^1.13.2"
   },
   "scripts": {
-    "build": "npm run clean && npm run mkdir && npm run build:html && npm run build:css && npm run build:js",
+    "build": "npm run clean && npm run mkdir && npm run build:html && npm run build:css && npm run build:js && npm run build:fonts",
     "watch": "npm run watch:html & npm run watch:css & npm run watch:js",
     "clean": "rm -fr build",
     "mkdir": "mkdir -p build",
@@ -41,6 +41,7 @@
     "build:js": "npm run build:js:minified && npm run build:js:unminified",
     "watch:js": "npm run watch:js:minified && npm run watch:js:unminified",
     "clean:js": "npm run clean:js:minified && npm run clean:js:unminified",
+    "build:fonts": "cp -r ./node_modules/materialize-css/dist/fonts build/"
   },
   "repository": {
     "type": "git",
