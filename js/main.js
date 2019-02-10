@@ -61,7 +61,7 @@ function getRequest(tag, limit) {
     tag: tag,
     limit: limit
   };
-  var url = "http://ws.audioscrobbler.com/2.0";
+  var url = "https://ws.audioscrobbler.com/2.0";
   $.getJSON(url, params, setArtistsObject);
 }
 
@@ -73,7 +73,7 @@ function getRequestArtistInfo(artistName) {
     format: "json",
     artist: artistName
   };
-  var url = "http://ws.audioscrobbler.com/2.0";
+  var url = "https://ws.audioscrobbler.com/2.0";
   state.countCallbacks++; // keep track of callback count so render function knows when to fire
   $.getJSON(url, params).done(setArtistInfo).fail(function(){ console.log("Error getting artist"); });
 }
